@@ -13,7 +13,9 @@ namespace Blazor.KeyVault
         public KeyVaultSecretPrefixManager(string? prefix)
         {
             prefix ??= "";
-            _prefix = prefix.EndsWith("--") ? prefix : $"{prefix}--";
+            // Ensure prefix ends with "--" unless whitespace or empty or you'll not be able to access secrets without prefix
+            if (!string.IsNullOrWhiteSpace(prefix) && !prefix.EndsWith("--"))
+                prefix += "--";
         }
 
         public override bool Load(SecretProperties secret)
